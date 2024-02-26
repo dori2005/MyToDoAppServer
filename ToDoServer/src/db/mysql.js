@@ -39,9 +39,16 @@ function deleteTest(callback, key) {
     });
 }
 
+function postLoginTest(callback, id, pw) {
+    connection.query(`SELETE pw FROM login WHERE id = '${id}`, (err, rows, fields) => {
+        if(err) throw err;
+        callback(rows);
+    });
+}
 module.exports = {
     getAllTest,
     postTest,
     patchTest,
     deleteTest,
+    postLoginTest,
 }

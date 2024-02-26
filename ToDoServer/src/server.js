@@ -20,6 +20,14 @@ app.get('/', (req, res) => {
   });
 })
 
+app.post('/login-token', (req, res) => {
+  console.log("call post");
+  db.postTest((rows) => {
+    res.statusCode = 200;
+  }, time, req.body[time]);
+  res.send('test pass');
+})
+
 app.post('/test2', (req, res) => {
   console.log("call post");
   Object.keys(req.body).forEach((time)=> {

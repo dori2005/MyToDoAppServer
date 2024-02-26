@@ -1,0 +1,37 @@
+# npm
+node_modules
+package-lock.json
+*.log
+*.gz
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+#nodemon
+lib-cov
+*.seed
+*.csv
+*.dat
+*.out
+*.pid
+
+.vscode/
+
+pids
+logs
+results
+
+npm-debug.log
+coverage
+tmp
+issues/
+test/fixtures/test*
+
+.idea
+
+# ignore additional files using core.excludesFile
+# https://git-scm.com/docs/gitignore

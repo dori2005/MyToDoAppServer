@@ -15,8 +15,8 @@ function postLoginTest(callback, id) {
     });
 }
 
-function enrollCertification(callback, id, cert) {
-    connection.query(`INSERT INTO cert (id) VALUES ('${cert}')`, (err, rows, fields) => {
+function enrollToken(callback, id, token) {
+    connection.query(`INSERT INTO cert (id) VALUES ('${id}')`, (err, rows, fields) => {
         if(err) throw err;
         callback(rows);
     });
@@ -36,6 +36,6 @@ function reSignTest(callback, id) {
 }
 module.exports = {
     postLoginTest,
-    enrollCertification,
+    enrollToken,
     signUpTest
 }

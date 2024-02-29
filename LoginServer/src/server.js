@@ -21,17 +21,23 @@ app.post('/login-token', async(req, res) => {
     cert : "test"
   }
   db.postLoginTest((rows) => {
-    if (rows === req.body.pw) {
+    if (rows[0].pw === req.body.pw) {
+      test = true;
+      console.log(test);
       res.statusCode = 200;
     }else 
       res.statusCode = 400;
   }, req.body.id);
 
-  console.log(test);
-  // db.enrollCertification((rows)=>{
-  //   console.log("enroll success!");
-  // }, req.body.id, data.cert)
-  
+  const testEnroll = (run) => {
+    console.log(run);
+    // if (run) {
+    //   db.enrollToken((rows)=>{
+    //     console.log("enroll success!");
+    //   }, req.body.id, data.cert)
+    // }
+  }
+  testEnroll(test);
   return res.send(JSON.stringify(data));
 })
 

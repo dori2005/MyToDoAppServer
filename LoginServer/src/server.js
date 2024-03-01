@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3001
 
-const db = require('./db/mysql');
+const db = require('./db/connection');
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -20,7 +20,7 @@ app.post('/login-token', async(req, res) => {
     id : req.body.id,
     cert : "test"
   }
-  db.postLoginTest((rows) => {
+  await db.postLoginTest((rows) => {
     if (rows[0].pw === req.body.pw) {
       test = true;
       console.log(test);
@@ -29,15 +29,12 @@ app.post('/login-token', async(req, res) => {
       res.statusCode = 400;
   }, req.body.id);
 
-  const testEnroll = (run) => {
-    console.log(run);
-    // if (run) {
-    //   db.enrollToken((rows)=>{
-    //     console.log("enroll success!");
-    //   }, req.body.id, data.cert)
-    // }
+  if (test) {
+    console.log(test);
+    await db.enrollToken((rows)=>{
+      console.log(rows);
+    }, req.body.id, data.cert)
   }
-  testEnroll(test);
   return res.send(JSON.stringify(data));
 })
 

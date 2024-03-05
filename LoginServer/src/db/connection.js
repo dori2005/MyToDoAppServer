@@ -1,7 +1,8 @@
-const conn = require('./mysql');
+const pool = require('./mysql');
 
 const postLoginTest = async(callback, id) => {
     try {
+        const conn = await pool.getConnection();
         const [rows] = await conn.execute('SELECT pw FROM login WHERE id=?',[id]);
         callback(rows);
         connection.release();
@@ -12,6 +13,7 @@ const postLoginTest = async(callback, id) => {
 
 const enrollToken = async(callback, id, token) => {
     try {
+        const conn = await pool.getConnection();
         const [rows] = await conn.execute('INSERT INTO cert (id) VALUES (?)',[id]);
         callback(rows);
         conn.release();

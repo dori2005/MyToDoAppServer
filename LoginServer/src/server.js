@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3001
 
-const db = require('./db/connection');
+const db = require('./db/mysql');
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -21,25 +21,35 @@ app.post('/login-token', async(req, res) => {
     cert : "test"
   }
   await db.postLoginTest((rows) => {
-    if (rows[0].pw === req.body.pw) {
-      test = true;
-      console.log(test);
-      res.statusCode = 200;
+    if(rows.length > 0) {
+      if (rows[0].pw === req.body.pw) {
+        test = true;
+        res.statusCode = 200;
+      }else 
+        res.statusCode = 400;
     }else 
       res.statusCode = 400;
   }, req.body.id);
 
   if (test) {
-    console.log(test);
     await db.enrollToken((rows)=>{
       console.log(rows);
     }, req.body.id, data.cert)
+    return res.json(data);
   }
-  return res.send(JSON.stringify(data));
+  return res.status(400).send();
+})
+
+app.delete('/login-token', (req, res) => {
+  db.deleteToken((rows) => {
+    console.log(rows);
+    if (rows !== undefined)
+      res.statusCode = 200;
+  }, req.body.id);
+  return res.send();
 })
 
 app.post('/user', (req, res) => {
-  console.log(req.body);
   db.signUpTest((rows) => {
     console.log(rows);
     res.status(200).send(rows);
@@ -53,13 +63,12 @@ app.get('/user/:id', (req, res) => {
       res.statusCode = 400;
   }, req.params.id);
 })
-app.delete('/user/:id', (req, res) => {
+app.delete('/user', (req, res) => {
   db.postLoginTest((rows) => {
-    if (rows === req.query.pw) {
+    if (rows !== undefined)
       res.statusCode = 200;
-    }else 
-      res.statusCode = 400;
-  }, req.params.id);
+  }, req.body.id);
+  return res.send("success");
 })
 
 

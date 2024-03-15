@@ -6,7 +6,11 @@ const db = require('./db/mysql');
 
 app.use(express.json());
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:19006');
+  const allowedOrigins = ['http://localhost:8081', 'http://localhost:19006']
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+       res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -18,14 +22,6 @@ app.get('/', (req, res) => {
     console.log(rows);
     res.json(rows);
   });
-})
-
-app.post('/login-token', (req, res) => {
-  console.log("call post");
-  db.postTest((rows) => {
-    res.statusCode = 200;
-  }, time, req.body[time]);
-  res.send('test pass');
 })
 
 app.post('/test2', (req, res) => {

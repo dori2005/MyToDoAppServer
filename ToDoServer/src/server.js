@@ -17,11 +17,32 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  db.getAllTest((rows) => {
-    console.log(rows);
-    res.json(rows);
-  });
+app.get('/', async(req, res) => {
+  const params = {
+    Token : req.query.token,
+  };
+  const queryString = new URLSearchParams(params).toString();
+  
+  console.log(queryString);
+
+  await fetch('http://localhost:3001/login-token',{
+    method: "GET"
+  })
+  .then((response) => {
+    if (response.status === 200)
+      return response.json();
+  }).then((data) => {
+    user_id = data[0];
+    console.error(data[0]);
+  })
+  .catch((error) => {
+    console.error('Error message:', error.message);
+  })
+
+  // db.getAllTest((rows) => {
+  //   console.log(rows);
+  //   res.json(rows);
+  // });
 })
 
 app.post('/test2', (req, res) => {

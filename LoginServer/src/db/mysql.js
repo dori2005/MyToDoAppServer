@@ -19,10 +19,10 @@ const postLoginTest = async(callback, id) => {
     }
 }
 
-const deleteToken = async(callback, id) => {
+const deleteToken = async(callback, token) => {
     try {
         const conn = await pool.getConnection();
-        const [rows] = await conn.execute('DELETE FROM cert WHERE id=?',[id]);
+        const [rows] = await conn.execute('DELETE FROM cert WHERE token=?',[token]);
         callback(rows);
         conn.release();
     } catch (err) {
@@ -33,7 +33,18 @@ const deleteToken = async(callback, id) => {
 const enrollToken = async(callback, id, token) => {
     try {
         const conn = await pool.getConnection();
-        const [rows] = await conn.execute('INSERT INTO cert (id) VALUES (?)',[id]);
+        const [rows] = await conn.execute('INSERT INTO cert (token, id) VALUES (?, ?)',[token, id]);
+        callback(rows);
+        conn.release();
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+const getUserId = async(callback, token) => {
+    try {
+        const conn = await pool.getConnection();
+        const [rows] = await conn.execute('SELECTi id FROM cert WHERE token=?',[token]);
         callback(rows);
         conn.release();
     } catch (err) {
@@ -51,9 +62,11 @@ const signUpTest = async(callback, id, pw) => {
     }
 }
 
+
 module.exports = {
     postLoginTest,
     enrollToken,
     signUpTest,
-    deleteToken
+    deleteToken,
+    getUserId
 }

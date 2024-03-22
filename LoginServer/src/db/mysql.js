@@ -44,7 +44,7 @@ const enrollToken = async(callback, id, token) => {
 const getUserId = async(callback, token) => {
     try {
         const conn = await pool.getConnection();
-        const [rows] = await conn.execute('SELECTi id FROM cert WHERE token=?',[token]);
+        const [rows] = await conn.execute('SELECT id FROM cert WHERE token=?',[token]);
         callback(rows);
         conn.release();
     } catch (err) {

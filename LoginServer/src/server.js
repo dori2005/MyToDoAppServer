@@ -61,10 +61,15 @@ app.delete('/login-token', (req, res) => {
 app.get('/user-id', (req, res) => {
   db.getUserId((rows) => {
     console.log(rows);
-    if (rows !== undefined)
+    if (rows !== undefined) {
       res.statusCode = 200;
+      res.json(rows[0]);
+    }else {
+      res.statusCode = 400;
+      res.json(rows);
+    }
   }, req.query.token);
-  return res.send();
+  return;
 })
 
 app.post('/user', (req, res) => {

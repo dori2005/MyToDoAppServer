@@ -7,15 +7,16 @@ const connection = mysql.createConnection({
     database:'REG_DB',
     connectionLimit: 4,
 });
-function getAllTest(callback){
-    connection.query(`SELECT * FROM TODO`, (err, rows, fields) => {
+
+function getAllTest(callback, id){
+    connection.query(`SELECT * FROM todos WHERE user_id='${id}'`, (err, rows, fields) => {
         if(err) throw err;
         callback(rows);
     });
 }
 
 function postTest(callback, user_id, time, data) {
-    connection.query(`INSERT INTO todo (user_id, time, todo_text, complete) VALUES (
+    connection.query(`INSERT INTO todos (user_id, time, todo_text, complete) VALUES (
         '${user_id}', '${time}', '${data["text"] }', ${data["complete"]==true?1:0})`, (err, rows, fields) => {
         if(err) throw err;
         callback(rows);
@@ -23,18 +24,18 @@ function postTest(callback, user_id, time, data) {
 }
 function patchTest(callback, key, text, complete) {
     if (text) {
-        connection.query(`UPDATE todo SET todo_text = '${text}', complete = '${complete?1:0}' WHERE time = '${key}'`, (err, rows, fields) => { 
+        connection.query(`UPDATE todos SET todo_text = '${text}', complete = '${complete?1:0}' WHERE time = '${key}'`, (err, rows, fields) => { 
             callback(rows);
         });
     } else {
-        connection.query(`UPDATE todo SET complete = '${complete?1:0}' WHERE time = '${key}'`, (err, rows, fields) => { 
+        connection.query(`UPDATE todos SET complete = '${complete?1:0}' WHERE time = '${key}'`, (err, rows, fields) => { 
             callback(rows);
         });
     }
 }
 
 function deleteTest(callback, key) {
-    connection.query(`DELETE FROM todo WHERE time = '${key}'`, (err, rows, fields) => {
+    connection.query(`DELETE FROM todos WHERE time = '${key}'`, (err, rows, fields) => {
         callback(rows);
     });
 }

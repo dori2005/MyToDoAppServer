@@ -1,6 +1,6 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const app = express();
+const port = 3000;
 
 const db = require('./db/mysql');
 
@@ -31,6 +31,9 @@ app.get('/', async(req, res) => {
   .then((response) => {
     if (response.status === 200)
       return response.json();
+    else {
+      response.status(400);
+    }
   }).then((data) => {
     console.log(data.id);
     db.getAllTest((rows) => {
@@ -41,7 +44,6 @@ app.get('/', async(req, res) => {
   .catch((error) => {
     console.error('Error message:', error.message);
   })
-
 })
 
 app.post('/test2', (req, res) => {
